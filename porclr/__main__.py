@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""Entry point for the hc script."""
+"""Entry point for the porclr script."""
 
 # Third party imports
 from elevate import elevate
