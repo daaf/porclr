@@ -8,10 +8,10 @@ Use `porclr` to link Docker Compose files from a Portainer volume to a directory
 ```shell
 $ git clone https://github.com/daaf/porclr.git
 $ cd porclr
-$ pip install -r requirements.txt
+$ python -m pip install -r requirements.txt
 ```
 
 ## Usage
 ```shell
-$ python porclr -l
+$ python porclr link
 ```
