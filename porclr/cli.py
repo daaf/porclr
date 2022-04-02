@@ -7,7 +7,7 @@ Usage:
 
 Options:
     -h --help   Show this help documentation.
-    -l --link   Link Compose files
+    -v --version See porclr's version
 """
 
 # Third party imports
