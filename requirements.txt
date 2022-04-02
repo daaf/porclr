@@ -1,3 +1,4 @@
 python-decouple
 elevate
 typer
+pytest

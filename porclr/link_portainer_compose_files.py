@@ -4,7 +4,7 @@
 from os import listdir, mkdir, link, path
 
 # Local imports
-from dockerutils import get_compose_attribute_value
+from porclr import dockerutils
 
 STACKS = {
     "network-stack": ["duckdns", "pihole-unbound"],
@@ -14,6 +14,8 @@ STACKS = {
     "rss-stack": ["freshrss", "mariadb"],
     "test-stack": ["alpine"],
 }
+
+get_compose_attribute_value = dockerutils.get_compose_attribute_value
 
 
 def get_stack_name_from_app_name(app):

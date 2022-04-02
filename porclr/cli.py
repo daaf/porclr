@@ -16,10 +16,11 @@ from typing import Optional
 from decouple import config
 
 # Local imports
-from link_portainer_compose_files import link_files
-from __init__ import __app_name__, __app_version__
+from porclr import __app_name__, __app_version__, link_portainer_compose_files
 
 app = typer.Typer()
+
+link_files = link_portainer_compose_files.link_files
 
 
 def _version_callback(value: bool) -> None:
