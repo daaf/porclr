@@ -7,11 +7,12 @@ from elevate import elevate
 
 # Local imports
 import cli
+from __init__ import __app_name__, __app_version__
 
 
 def main():
     elevate()
-    cli.init()
+    cli.app(prog_name=__app_name__)
 
 
 if __name__ == "__main__":

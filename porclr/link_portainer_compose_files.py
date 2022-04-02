@@ -24,7 +24,7 @@ def get_stack_name_from_app_name(app):
             return stack
 
 
-def link(portainer_compose_dir, linked_dir):
+def link_files(portainer_compose_dir, linked_dir):
     """
     Iterate through the Docker Compose files in Portainer's data directory.
     For each Compose file, in a second directory, create a subdirectory with
