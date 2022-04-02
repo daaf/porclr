@@ -16,7 +16,7 @@ from typing import Optional
 from decouple import config
 
 # Local imports
-from porclr import __app_name__, __version__, link_portainer_compose_files
+from porclr import link_portainer_compose_files, __app_name__, __version__
 
 app = typer.Typer()
 
