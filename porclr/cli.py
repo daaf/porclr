@@ -41,6 +41,20 @@ def link(path: Optional[str] = typer.Argument(None)) -> None:
     link_files(portainer_compose_dir, local_repo)
 
 
+@app.command()
+def copy(
+    endpoint: str = typer.Argument(...),
+    username: str = typer.Option(
+        ...,
+        "--username",
+        "-u",
+        help="The username to use to authenticate with Portainer.",
+        prompt=True,
+    ),
+) -> None:
+    pass
+
+
 @app.callback()
 def main(
     version: Optional[bool] = typer.Option(
