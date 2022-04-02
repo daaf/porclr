@@ -1,4 +1,6 @@
 python-decouple
 elevate
 typer
+colorama
+shellingham
 pytest
