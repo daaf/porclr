@@ -16,7 +16,7 @@ from typing import Optional
 from decouple import config
 
 # Local imports
-from porclr import __app_name__, __app_version__, link_portainer_compose_files
+from porclr import __app_name__, __version__, link_portainer_compose_files
 
 app = typer.Typer()
 
@@ -25,7 +25,7 @@ link_files = link_portainer_compose_files.link_files
 
 def _version_callback(value: bool) -> None:
     if value:
-        typer.echo(f"{__app_name__} v{__app_version__}")
+        typer.echo(f"{__app_name__} v{__version__}")
         raise typer.Exit()
 
 

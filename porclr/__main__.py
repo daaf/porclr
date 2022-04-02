@@ -6,7 +6,7 @@
 from elevate import elevate
 
 # Local imports
-from porclr import __app_name__, __app_version__, cli
+from porclr import __app_name__, cli
 
 
 def main():
