@@ -4,3 +4,4 @@ typer
 colorama
 shellingham
 pytest
+requests
