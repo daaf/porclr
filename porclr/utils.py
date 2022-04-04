@@ -7,21 +7,6 @@ from decouple import config
 from os import path, mkdir
 
 
-def get_compose_attribute_value(compose_file, keyword):
-    """
-    Get the value of an attribute from a Docker Compose file.
-
-    :param compose_file: The Docker Compose file to search.
-    :param keyword: The keyword of the value to retrieve.
-    :returns: If the keyword is found, the value corresponding to the keyword.
-    """
-    with open(compose_file) as file:
-        for line in file:
-            if keyword in line:
-                value = line.replace(f"{keyword}:", "").strip()
-                return value
-
-
 def create_dir_if_not_extant(path_to_dir: str) -> None:
 
     print()
@@ -34,10 +19,6 @@ def create_dir_if_not_extant(path_to_dir: str) -> None:
         print(f"\t{path_to_dir} already exists.")
 
     print()
-
-
-def create_compose_file_if_not_extant(path_to_dir: str) -> None:
-    create_dir_if_not_extant(path_to_dir)
 
 
 def get_local_path(path):
