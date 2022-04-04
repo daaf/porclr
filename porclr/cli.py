@@ -13,13 +13,9 @@ Options:
 # Third party imports
 import typer
 from typing import Optional
-from decouple import config
 
 # Local imports
 from porclr import actions, __app_name__, __version__
-from porclr import portainer_queries
-from porclr import utils
-from porclr.actions import copy_compose_files
 
 app = typer.Typer()
 
@@ -30,12 +26,46 @@ def _version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
-@app.command()
-def link(path: Optional[str] = typer.Argument(None)) -> None:
-    portainer_compose_dir = config("PORTAINER_COMPOSE_DIR")
-    local_path = utils.get_local_path(path)
+@app.callback()
+def main(
+    version: Optional[bool] = typer.Option(
+        None,
+        "--version",
+        "-v",
+        help="Show the application's version and exit.",
+        callback=_version_callback,
+        is_eager=True,
+    )
+) -> None:
+    return
 
-    actions.link_compose_files(portainer_compose_dir, local_path)
+
+@app.command()
+def link(
+    url: str = typer.Argument(
+        ..., help="The URL of the Portainer instance, including port number."
+    ),
+    path: Optional[str] = typer.Argument(
+        None,
+        help="The path to the directory where the Compose file links should be created.",
+    ),
+    username: Optional[str] = typer.Option(
+        ...,
+        "--username",
+        "-u",
+        help="The username to use to authenticate with Portainer.",
+        prompt=True,
+    ),
+    password: Optional[str] = typer.Option(
+        ...,
+        "--password",
+        "-p",
+        help="The password to use to authenticate with Portainer.",
+        prompt=True,
+    ),
+) -> None:
+
+    actions.execute_stack_action("link", url, path, username, password)
 
 
 @app.command()
@@ -62,30 +92,5 @@ def copy(
         prompt=True,
     ),
 ) -> None:
-    auth_token = portainer_queries.get_auth_token(url, username, password)
-    stack_list = portainer_queries.get_stack_list(url, auth_token=auth_token)
-    local_path = utils.get_local_path(path)
 
-    actions.copy_compose_files(url, local_path, stack_list, auth_token=auth_token)
-
-    print(f"url: {url}")
-    print(f"path: {path}")
-    print(f"local_path: {local_path}")
-    print(f"username: {username}")
-    print(f"password: {password}")
-    print(f"auth_token: {auth_token}")
-    print(stack_list)
-
-
-@app.callback()
-def main(
-    version: Optional[bool] = typer.Option(
-        None,
-        "--version",
-        "-v",
-        help="Show the application's version and exit.",
-        callback=_version_callback,
-        is_eager=True,
-    )
-) -> None:
-    return
+    actions.execute_stack_action("copy", url, path, username, password)

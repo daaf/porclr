@@ -22,6 +22,7 @@ def get_stack_list(url: str, auth_token: str):
     response = requests.get(f"http://{url}/api/stacks", headers=headers)
     response.raise_for_status()
     data = json.loads(response.text)
+    print(data)
     stack_list = [{"id": stack["Id"], "name": stack["Name"]} for stack in data]
 
     return stack_list

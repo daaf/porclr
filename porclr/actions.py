@@ -1,35 +1,17 @@
 #!/usr/bin/env python3
 
+# Third party import
+from argparse import ArgumentError
+from decouple import config
+
 # Standard library imports
 import os
 
 # Local imports
 from porclr import portainer_queries, utils
 
-STACKS = {
-    "network-stack": ["duckdns", "pihole-unbound"],
-    "grafana-stack": ["telegraf", "influxdb", "chronograf", "grafana"],
-    "heimdall-stack": ["heimdall"],
-    "home-stack": ["grocy"],
-    "rss-stack": ["freshrss", "mariadb"],
-    "test-stack": ["alpine"],
-}
 
-get_compose_attribute_value = utils.get_compose_attribute_value
-
-
-def get_stack_name_from_app_name(app):
-    """Search the STACKS dictionary for `app`. If `app` is found,
-    return the name of the stack."""
-    for stack in STACKS:
-        if app in STACKS[stack]:
-            return stack
-
-
-def link_compose_file(path_to_original_compose_file, path_to_stack_dir):
-    path_to_new_compose_file = f"{path_to_stack_dir}/docker-compose.yml"
-
-    print(f"Checking for docker-compose.yml at {path_to_new_compose_file}...")
+def link_compose_file(path_to_original_compose_file, path_to_new_compose_file):
 
     if not os.path.exists(path_to_new_compose_file):
         os.link(path_to_original_compose_file, path_to_new_compose_file)
@@ -47,10 +29,7 @@ def link_compose_file(path_to_original_compose_file, path_to_stack_dir):
     return False
 
 
-def copy_compose_file(path_to_stack_dir, url, stack_id, auth_token):
-    path_to_new_compose_file = f"{path_to_stack_dir}/docker-compose.yml"
-
-    print(f"Checking for docker-compose.yml at {path_to_new_compose_file}...")
+def copy_compose_file(path_to_new_compose_file, url, stack_id, auth_token):
 
     if not os.path.exists(path_to_new_compose_file):
         compose_file = portainer_queries.get_compose_file(
@@ -70,69 +49,50 @@ def copy_compose_file(path_to_stack_dir, url, stack_id, auth_token):
     return False
 
 
-def link_compose_files(portainer_compose_dir, linked_dir):
-    """
-    Iterate through the Docker Compose files in Portainer's data directory.
-    For each Compose file, in a second directory, create a subdirectory with
-    the same name as the stack. Inside the stack directory, create a link to the
-    corresponding Compose file in Portainer's data directory.
-
-    :param portainer_compose_dir: The path to the `compose` directory inside
-        Portainer's data directory.
-    :param linked_dir: The directory in which to create the links.
-    """
+def execute_stack_action(
+    action: str,
+    url: str,
+    path: str,
+    username: str,
+    password: str,
+):
+    auth_token = portainer_queries.get_auth_token(url, username, password)
+    stack_list = portainer_queries.get_stack_list(url, auth_token=auth_token)
+    local_path = utils.get_local_path(path)
     new_count = 0
-
-    for subdir in os.listdir(portainer_compose_dir):
-        path_to_original_compose_file = (
-            f"{portainer_compose_dir}/{subdir}/docker-compose.yml"
-        )
-        app_name = get_compose_attribute_value(
-            path_to_original_compose_file, "container_name"
-        )
-        stack_name = get_stack_name_from_app_name(app_name)
-        path_to_stack_dir = f"{linked_dir}/{stack_name}"
-
-        utils.create_dir_if_not_extant(path_to_stack_dir)
-
-        result = link_compose_file(
-            path_to_original_compose_file,
-            path_to_stack_dir,
-        )
-
-        if result:
-            new_count += 1
-
-    if new_count > 1:
-        print(f"Created {new_count} new links to Compose files.")
-    elif new_count > 0:
-        print(f"Created 1 new link to Compose file.")
-    else:
-        print("Nothing to update.")
-
-    print()
-
-
-def copy_compose_files(url: str, path: str, stack_list: list[dict], auth_token: str):
-    new_count = 0
+    action_description = ""
 
     for stack in stack_list:
         stack_id = stack["id"]
         stack_name = stack["name"]
-        path_to_stack_dir = f"{path}/{stack_name}"
+        path_to_stack_dir = f"{local_path}/{stack_name}"
+        path_to_new_compose_file = f"{path_to_stack_dir}/docker-compose.yml"
+        portainer_compose_dir = config("PORTAINER_COMPOSE_DIR")
 
         utils.create_dir_if_not_extant(path_to_stack_dir)
-        result = copy_compose_file(
-            path_to_stack_dir, url, stack_id, auth_token=auth_token
-        )
+
+        print(f"Checking for docker-compose.yml at {path_to_new_compose_file}...")
+
+        if action == "link":
+            action_description = "links to "
+            path_to_original_compose_file = (
+                f"{portainer_compose_dir}/{stack_id}/docker-compose.yml"
+            )
+            result = link_compose_file(
+                path_to_original_compose_file, path_to_new_compose_file
+            )
+        elif action == "copy":
+            result = copy_compose_file(
+                path_to_new_compose_file, url, stack_id, auth_token
+            )
+        else:
+            raise ArgumentError("Invalid action passed to `execute_stack_action`.")
 
         if result:
             new_count += 1
 
-    if new_count > 1:
-        print(f"Created {new_count} new Compose files.")
-    elif new_count > 0:
-        print(f"Created 1 new Compose file.")
+    if new_count > 0:
+        print(f"Created {new_count} new {action_description}Compose files.")
     else:
         print("Nothing to update.")
 
