@@ -3,6 +3,7 @@
 # Third party import
 from argparse import ArgumentError
 from decouple import config
+from typer import echo
 
 # Standard library imports
 import os
@@ -16,15 +17,15 @@ def link_compose_file(path_to_original_compose_file, path_to_new_compose_file):
     if not os.path.exists(path_to_new_compose_file):
         os.link(path_to_original_compose_file, path_to_new_compose_file)
 
-        print(
+        echo(
             f"\tCreated link to {path_to_original_compose_file} in {path_to_new_compose_file}."
         )
-        print()
+        echo()
 
         return True
 
-    print(f"\t{path_to_new_compose_file} already exists.")
-    print()
+    echo(f"\t{path_to_new_compose_file} already exists.")
+    echo()
 
     return False
 
@@ -38,13 +39,13 @@ def copy_compose_file(path_to_new_compose_file, url, stack_id, auth_token):
         with open(path_to_new_compose_file, "w") as file:
             file.write(compose_file)
 
-        print(f"\tCopied docker-compose.yml to {path_to_new_compose_file}.")
-        print()
+        echo(f"\tCopied docker-compose.yml to {path_to_new_compose_file}.")
+        echo()
 
         return True
 
-    print(f"\t{path_to_new_compose_file} already exists.")
-    print()
+    echo(f"\t{path_to_new_compose_file} already exists.")
+    echo()
 
     return False
 
@@ -71,7 +72,7 @@ def execute_stack_action(
 
         utils.create_dir_if_not_extant(path_to_stack_dir)
 
-        print(f"Checking for docker-compose.yml at {path_to_new_compose_file}...")
+        echo(f"Checking for docker-compose.yml at {path_to_new_compose_file}...")
 
         if action == "link":
             action_description = "links to "
@@ -92,8 +93,8 @@ def execute_stack_action(
             new_count += 1
 
     if new_count > 0:
-        print(f"Created {new_count} new {action_description}Compose files.")
+        echo(f"Created {new_count} new {action_description}Compose files.")
     else:
-        print("Nothing to update.")
+        echo("Nothing to update.")
 
-    print()
+    echo()

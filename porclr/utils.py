@@ -2,6 +2,7 @@
 
 # Third party imports
 from decouple import config
+from typer import echo
 
 # Standard library imports
 from os import path, mkdir
@@ -9,16 +10,16 @@ from os import path, mkdir
 
 def create_dir_if_not_extant(path_to_dir: str) -> None:
 
-    print()
-    print(f"Checking for directory {path_to_dir}...")
+    echo()
+    echo(f"Checking for directory {path_to_dir}...")
 
     if not path.exists(path_to_dir):
         mkdir(path_to_dir)
-        print(f"\tCreated {path_to_dir}")
+        echo(f"\tCreated {path_to_dir}")
     else:
-        print(f"\t{path_to_dir} already exists.")
+        echo(f"\t{path_to_dir} already exists.")
 
-    print()
+    echo()
 
 
 def get_local_path(path):
