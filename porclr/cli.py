@@ -42,20 +42,10 @@ def main(
 
 @app.command()
 def link(
-    url: str = typer.Argument(
-        ..., help="The URL of the Portainer instance, including port number."
-    ),
     path: Optional[str] = typer.Argument(
         None,
         help="The path to the directory where the Compose file links should be created.",
     ),
-    username: Optional[str] = typer.Option(
-        ...,
-        "--username",
-        "-u",
-        help="The username to use to authenticate with Portainer.",
-        prompt=True,
-    ),
     password: Optional[str] = typer.Option(
         ...,
         "--password",
@@ -64,25 +54,16 @@ def link(
         prompt=True,
     ),
 ) -> None:
-
-    actions.execute_stack_action("link", url, path, username, password)
+    pass
+    link_action = actions.Link(path, password)
+    link_action.execute()
 
 
 @app.command()
 def copy(
-    url: str = typer.Argument(
-        ..., help="The URL of the Portainer instance, including port number."
-    ),
     path: Optional[str] = typer.Argument(
         None,
         help="The path to the directory to which the Compose files should be copied.",
-    ),
-    username: Optional[str] = typer.Option(
-        ...,
-        "--username",
-        "-u",
-        help="The username to use to authenticate with Portainer.",
-        prompt=True,
     ),
     password: Optional[str] = typer.Option(
         ...,
@@ -92,5 +73,5 @@ def copy(
         prompt=True,
     ),
 ) -> None:
-
-    actions.execute_stack_action("copy", url, path, username, password)
+    copy_action = actions.Copy(path, password)
+    copy_action.execute()

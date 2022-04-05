@@ -22,9 +22,9 @@ def create_dir_if_not_extant(path_to_dir: str) -> None:
     echo()
 
 
-def get_local_path(path):
-    if path is None:
-        local_repo = config("LINK_PARENT_DIR")
-    else:
-        local_repo = path
-    return local_repo
+# def get_local_path(path):
+#     if path is None:
+#         local_repo = config("LINK_PARENT_DIR")
+#     else:
+#         local_repo = path
+#     return local_repo
