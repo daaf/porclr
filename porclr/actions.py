@@ -31,15 +31,8 @@ class ComposeFileAction(Action):
     def __init__(self, path: str, password: str) -> None:
         super().__init__(password)
         self.stack_list = portainer_queries.get_stack_list(self.url, self.auth_token)
-        self.local_path = self._get_local_path(path)
+        self.local_path = path if path else config("LINK_PARENT_DIR")
         self.new_count = 0
-
-    def _get_local_path(self, path):
-        if path is None:
-            local_path = config("LINK_PARENT_DIR")
-        else:
-            local_path = path
-        return local_path
 
     def _create_dir_if_not_extant(self, path_to_dir: str) -> None:
         echo(f"\nChecking for directory {path_to_dir}...")
