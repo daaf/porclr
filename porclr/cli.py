@@ -55,9 +55,11 @@ def link(
         hide_input=True,
     ),
 ) -> None:
-    pass
-    link_action = actions.Link(path, password)
-    link_action.execute()
+    try:
+        link_action = actions.Link(path, password)
+        link_action.execute()
+    except:
+        return
 
 
 @app.command()
@@ -75,5 +77,8 @@ def copy(
         hide_input=True,
     ),
 ) -> None:
-    copy_action = actions.Copy(path, password)
-    copy_action.execute()
+    try:
+        copy_action = actions.Copy(path, password)
+        copy_action.execute()
+    except:
+        return

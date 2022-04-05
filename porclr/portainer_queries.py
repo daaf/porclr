@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 # Third party imports
+from urllib.error import HTTPError
 import requests
 
 # Standard library imports
@@ -8,13 +9,21 @@ import json
 
 
 def get_auth_token(url: str, username: str, password: str):
+    headers = {"Content-Type": "application/json"}
     payload = {"username": username, "password": password}
-    response = requests.post(f"http://{url}/api/auth", json=payload)
-    response.raise_for_status()
-    data = json.loads(response.text)
-    auth_token = data["jwt"]
 
-    return auth_token
+    try:
+        response = requests.post(
+            f"http://{url}/api/auth",
+            headers=headers,
+            json=(payload),
+        )
+        data = json.loads(response.text)
+        auth_token = data["jwt"]
+
+        return auth_token
+    except:
+        print("Incorrect password")
 
 
 def get_stack_list(url: str, auth_token: str):

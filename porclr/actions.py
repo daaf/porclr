@@ -8,7 +8,7 @@ from typer import echo
 import os
 
 # Local imports
-from porclr import portainer_queries, utils
+from porclr import portainer_queries
 
 
 class Action:
@@ -41,7 +41,7 @@ class ComposeFileAction(Action):
             local_path = path
         return local_path
 
-    def _create_dir_if_not_extant(path_to_dir: str) -> None:
+    def _create_dir_if_not_extant(self, path_to_dir: str) -> None:
         echo(f"\nChecking for directory {path_to_dir}...")
 
         if not os.path.exists(path_to_dir):
@@ -52,8 +52,11 @@ class ComposeFileAction(Action):
 
     def _create_dir(self, stack_name):
         path_to_stack_dir = f"{self.local_path}/{stack_name}"
-        self._create_dir_if_not_extant(path_to_stack_dir)
 
+        try:
+            self._create_dir_if_not_extant(path_to_stack_dir)
+        except:
+            print("Invalid path.")
         return path_to_stack_dir
 
     def _execute(self, func, stack_name, *args, **kwargs):
@@ -79,7 +82,7 @@ class Link(ComposeFileAction):
                 f"{self.portainer_compose_dir}/{stack_id}/docker-compose.yml"
             )
             result = self._execute(
-                self.link_compose_file, stack_name, path_to_original_compose_file
+                self._link_compose_file, stack_name, path_to_original_compose_file
             )
 
             if result:
