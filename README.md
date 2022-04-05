@@ -2,7 +2,7 @@
 
 That's right, it's **`porclr`**, the `por`tainer `c`ompose `l`inke`r`! 
 
-Use `porclr` to link or copy Docker Compose files from a Portainer volume to a directory of your choosing. You can then track the latter directory with version control and push it to a remote repo. Never lose the Compose files for your Portainer stacks again!
+Use `porclr` to link or copy Docker Compose files from Portainer to a directory of your choosing. You can then track the latter directory with version control and push it to a remote repo. Never lose the Compose files for your Portainer stacks again!
 
 `porclr` is mainly useful if you defined your stacks _in_ Portainer and don't already have the Compose files under version control.
 
