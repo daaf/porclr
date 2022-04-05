@@ -23,6 +23,13 @@ Create a file called `.env` in the root of your local `porclr` repo. Add the fol
 |`PORTAINER_COMPOSE_DIR`||`/var/lib/docker/volumes/portainer_data/_data/compose`|The location of the Docker volume from which to link/copy the Compose files. Only required if you plan to use the `porclr link` command.|
 
 ## Usage
+`porclr` has two modes: `link` and `copy`.
+* `link` creates hard links to the Compose files in a local Portainer volume.
+* `copy` copies the Compose files from Portainer via the Portainer API.
+
+Both modes create a series of subdirectories&mdash;one for each Compose file&mdash;in `LOCAL_REPO`. Both modes also require you to authenticate with your Portainer credentials in order to fetch information about your stacks.
+
+To run the `link` and `copy` commands:
 ```shell
 $ python -m porclr link
 $ python -m porclr copy
