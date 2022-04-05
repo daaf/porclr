@@ -15,13 +15,10 @@ from porclr import utils
 class Action:
 
     url = config("PORTAINER_URL")
-    username = config("PORTAINER_USERNAME")
     auth_token = ""
 
-    def __init__(self, password: str) -> None:
-        self.auth_token = portainer_queries.get_auth_token(
-            self.url, self.username, password
-        )
+    def __init__(self, username, password: str) -> None:
+        self.auth_token = portainer_queries.get_auth_token(self.url, username, password)
 
 
 class ComposeFileAction(Action):
@@ -29,10 +26,10 @@ class ComposeFileAction(Action):
     stack_list = None
     local_path = None
 
-    def __init__(self, path: str, password: str) -> None:
-        super().__init__(password)
+    def __init__(self, path: str, username, password: str) -> None:
+        super().__init__(username, password)
         self.stack_list = portainer_queries.get_stack_list(self.url, self.auth_token)
-        self.local_path = path if path else config("LINK_PARENT_DIR")
+        self.local_path = path if path else config("LOCAL_REPO")
         self.new_count = 0
 
     def _create_stack_dir(self, stack_name):
@@ -49,8 +46,8 @@ class ComposeFileAction(Action):
 
 
 class Link(ComposeFileAction):
-    def __init__(self, path: str, password: str) -> None:
-        super().__init__(path, password)
+    def __init__(self, path: str, username: str, password: str) -> None:
+        super().__init__(path, username, password)
         self.portainer_compose_dir = config("PORTAINER_COMPOSE_DIR")
 
     def execute(self):
@@ -85,8 +82,8 @@ class Link(ComposeFileAction):
 
 
 class Copy(ComposeFileAction):
-    def __init__(self, path: str, password: str) -> None:
-        super().__init__(path, password)
+    def __init__(self, path: str, username: str, password: str) -> None:
+        super().__init__(path, username, password)
 
     def execute(self):
         self.new_count = 0

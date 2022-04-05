@@ -46,6 +46,13 @@ def link(
         None,
         help="The path to the directory where the Compose file links should be created.",
     ),
+    username: Optional[str] = typer.Option(
+        ...,
+        "--username",
+        "-u",
+        help="The username to use to authenticate with Portainer.",
+        prompt=True,
+    ),
     password: Optional[str] = typer.Option(
         ...,
         "--password",
@@ -56,7 +63,7 @@ def link(
     ),
 ) -> None:
     try:
-        link_action = actions.Link(path, password)
+        link_action = actions.Link(path=path, username=username, password=password)
         link_action.execute()
     except:
         return
@@ -68,6 +75,13 @@ def copy(
         None,
         help="The path to the directory to which the Compose files should be copied.",
     ),
+    username: Optional[str] = typer.Option(
+        ...,
+        "--username",
+        "-u",
+        help="The username to use to authenticate with Portainer.",
+        prompt=True,
+    ),
     password: Optional[str] = typer.Option(
         ...,
         "--password",
@@ -78,7 +92,7 @@ def copy(
     ),
 ) -> None:
     try:
-        copy_action = actions.Copy(path, password)
+        copy_action = actions.Copy(path=path, username=username, password=password)
         copy_action.execute()
     except:
         return
