@@ -16,8 +16,8 @@ $ python -m pip install -r requirements.txt
 ## Setup
 Create a file called `.env` in the root of your local `porclr` repo. Add the following environment variables in the format `KEY=VALUE`:
 
-|Environment Variable|Example|Description|
-------------------------------------------
+|Environment variable|Example value|Description|
+|--------------------|-------|-----------|
 |`PORTAINER_URL`|127.0.0.1:9443|The URL and port number of the Portainer instance.|
 |`PORTAINER_COMPOSE_DIR`|/var/lib/docker/volumes/portainer_data/_data/compose|The location of the Docker volume from which to link/copy the Compose files.|
 
