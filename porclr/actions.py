@@ -9,6 +9,7 @@ import os
 
 # Local imports
 from porclr import portainer_queries
+from porclr import utils
 
 
 class Action:
@@ -34,26 +35,13 @@ class ComposeFileAction(Action):
         self.local_path = path if path else config("LINK_PARENT_DIR")
         self.new_count = 0
 
-    def _create_dir_if_not_extant(self, path_to_dir: str) -> None:
-        echo(f"\nChecking for directory {path_to_dir}...")
-
-        if not os.path.exists(path_to_dir):
-            os.mkdir(path_to_dir)
-            echo(f"\tCreated {path_to_dir}\n")
-        else:
-            echo(f"\t{path_to_dir} already exists.\n")
-
-    def _create_dir(self, stack_name):
+    def _create_stack_dir(self, stack_name):
         path_to_stack_dir = f"{self.local_path}/{stack_name}"
-
-        try:
-            self._create_dir_if_not_extant(path_to_stack_dir)
-        except:
-            print("Invalid path.")
+        utils.create_dir_if_not_extant(path_to_stack_dir)
         return path_to_stack_dir
 
     def _execute(self, func, stack_name, *args, **kwargs):
-        path_to_stack_dir = self._create_dir(stack_name)
+        path_to_stack_dir = self._create_stack_dir(stack_name)
         path_to_new_compose_file = f"{path_to_stack_dir}/docker-compose.yml"
         result = func(path_to_new_compose_file, *args, **kwargs)
 
