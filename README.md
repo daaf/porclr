@@ -33,7 +33,7 @@ Upon running either `porclr link` or `porclr copy`, you'll be prompted to authen
 ### Location & directory structure
 Both modes create a series of subdirectories&mdash;one for each Compose file&mdash;in a directory that you specify. If you've defined a `LOCAL_REPO` environment variable in your .env file, the path defined in `LOCAL_REPO` will be used by default, but can be overridden by passing in a path as an argument to either `porclr link` or `porclr copy`. If you haven't defined a `LOCAL_REPO` environment variable, you must pass in a path.
 
-To run the `link` and `copy` commands:
+### Running the commands
 ```shell
 # If you've defined `LOCAL_REPO` in your .env file
 $ python -m porclr link
