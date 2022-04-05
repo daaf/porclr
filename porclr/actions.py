@@ -30,7 +30,6 @@ class ComposeFileAction(Action):
         super().__init__(username, password)
         self.stack_list = portainer_queries.get_stack_list(self.url, self.auth_token)
         self.local_path = path if path else config("LOCAL_REPO")
-        self.new_count = 0
 
     def _create_stack_dir(self, stack_name):
         path_to_stack_dir = f"{self.local_path}/{stack_name}"
@@ -51,7 +50,7 @@ class Link(ComposeFileAction):
         self.portainer_compose_dir = config("PORTAINER_COMPOSE_DIR")
 
     def execute(self):
-        self.new_count = 0
+        new_count = 0
 
         for stack in self.stack_list:
             stack_id = stack["id"]
@@ -64,7 +63,9 @@ class Link(ComposeFileAction):
             )
 
             if result:
-                self.new_count += 1
+                new_count += 1
+        
+        echo(f"Linked {new_count} Compose files.\n")
 
     def _link_compose_file(
         self, path_to_new_compose_file, path_to_original_compose_file
@@ -86,7 +87,7 @@ class Copy(ComposeFileAction):
         super().__init__(path, username, password)
 
     def execute(self):
-        self.new_count = 0
+        new_count = 0
 
         for stack in self.stack_list:
             stack_id = stack["id"]
@@ -95,7 +96,9 @@ class Copy(ComposeFileAction):
             result = self._execute(self._copy_compose_file, stack_name, stack_id)
 
             if result:
-                self.new_count += 1
+                new_count += 1
+        
+        echo(f"Copied {new_count} Compose files.\n")
 
     def _copy_compose_file(self, path_to_new_compose_file, stack_id):
         if not os.path.exists(path_to_new_compose_file):

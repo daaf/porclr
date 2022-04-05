@@ -13,7 +13,7 @@ def create_dir_if_not_extant(path_to_dir: str) -> None:
     if not path.exists(path_to_dir):
         try:
             mkdir(path_to_dir)
-            echo(f"\tCreated {path_to_dir}\n")
+            echo(f"\tCreated {path_to_dir}")
         except:
             echo("Invalid path.")
     else:
