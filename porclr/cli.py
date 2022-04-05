@@ -52,6 +52,7 @@ def link(
         "-p",
         help="The password to use to authenticate with Portainer.",
         prompt=True,
+        hide_input=True,
     ),
 ) -> None:
     pass
@@ -71,6 +72,7 @@ def copy(
         "-p",
         help="The password to use to authenticate with Portainer.",
         prompt=True,
+        hide_input=True,
     ),
 ) -> None:
     copy_action = actions.Copy(path, password)

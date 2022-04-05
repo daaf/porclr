@@ -41,9 +41,18 @@ class ComposeFileAction(Action):
             local_path = path
         return local_path
 
+    def _create_dir_if_not_extant(path_to_dir: str) -> None:
+        echo(f"\nChecking for directory {path_to_dir}...")
+
+        if not os.path.exists(path_to_dir):
+            os.mkdir(path_to_dir)
+            echo(f"\tCreated {path_to_dir}\n")
+        else:
+            echo(f"\t{path_to_dir} already exists.\n")
+
     def _create_dir(self, stack_name):
         path_to_stack_dir = f"{self.local_path}/{stack_name}"
-        utils.create_dir_if_not_extant(path_to_stack_dir)
+        self._create_dir_if_not_extant(path_to_stack_dir)
 
         return path_to_stack_dir
 
@@ -102,7 +111,7 @@ class Copy(ComposeFileAction):
             stack_id = stack["id"]
             stack_name = stack["name"]
 
-            result = self._execute(self.copy_compose_file, stack_name, stack_id)
+            result = self._execute(self._copy_compose_file, stack_name, stack_id)
 
             if result:
                 self.new_count += 1
