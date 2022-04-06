@@ -36,40 +36,39 @@ class ComposeFileAction(Action):
         utils.create_dir_if_not_extant(path_to_stack_dir)
         return path_to_stack_dir
 
-    def _execute(self, func, stack_name, *args, **kwargs):
-        path_to_stack_dir = self._create_stack_dir(stack_name)
-        path_to_new_compose_file = f"{path_to_stack_dir}/docker-compose.yml"
-        result = func(path_to_new_compose_file, *args, **kwargs)
-
-        return result
-
-
-class Link(ComposeFileAction):
-    def __init__(self, path: str, username: str, password: str) -> None:
-        super().__init__(path, username, password)
-        self.portainer_compose_dir = config("PORTAINER_COMPOSE_DIR")
-
-    def execute(self):
+    def _execute(self, child_class, func):
         new_count = 0
 
         for stack in self.stack_list:
             stack_id = stack["id"]
             stack_name = stack["name"]
-            path_to_original_compose_file = (
-                f"{self.portainer_compose_dir}/{stack_id}/docker-compose.yml"
-            )
-            result = self._execute(
-                self._link_compose_file, stack_name, path_to_original_compose_file
-            )
+
+            path_to_stack_dir = self._create_stack_dir(stack_name)
+            path_to_new_compose_file = f"{path_to_stack_dir}/docker-compose.yml"
+
+            result = func(path_to_new_compose_file, stack_id)
+            result_type = type(child_class).__name__.lower()
 
             if result:
                 new_count += 1
-        
-        echo(f"Linked {new_count} Compose files.\n")
 
-    def _link_compose_file(
-        self, path_to_new_compose_file, path_to_original_compose_file
-    ):
+        if result:
+            echo(f"Created {result_type} for {new_count} Compose files.\n")
+        else:
+            echo("Nothing to update.")
+
+
+class Link(ComposeFileAction):
+    def __init__(self, path: str, username: str, password: str) -> None:
+        super().__init__(path, username, password)
+
+    def execute(self):
+        self._execute(self, self._link_compose_file)
+
+    def _link_compose_file(self, path_to_new_compose_file, stack_id):
+        path_to_original_compose_file = (
+            f"{self.portainer_compose_dir}/{stack_id}/docker-compose.yml"
+        )
         if not os.path.exists(path_to_new_compose_file):
             os.link(path_to_original_compose_file, path_to_new_compose_file)
 
@@ -87,18 +86,7 @@ class Copy(ComposeFileAction):
         super().__init__(path, username, password)
 
     def execute(self):
-        new_count = 0
-
-        for stack in self.stack_list:
-            stack_id = stack["id"]
-            stack_name = stack["name"]
-
-            result = self._execute(self._copy_compose_file, stack_name, stack_id)
-
-            if result:
-                new_count += 1
-        
-        echo(f"Copied {new_count} Compose files.\n")
+        self._execute(self, self._copy_compose_file)
 
     def _copy_compose_file(self, path_to_new_compose_file, stack_id):
         if not os.path.exists(path_to_new_compose_file):
