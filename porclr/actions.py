@@ -61,6 +61,7 @@ class ComposeFileAction(Action):
 class Link(ComposeFileAction):
     def __init__(self, path: str, username: str, password: str) -> None:
         super().__init__(path, username, password)
+        self.portainer_compose_dir = config("PORTAINER_COMPOSE_DIR")
 
     def execute(self):
         self._execute(self, self._link_compose_file)
