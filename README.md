@@ -39,7 +39,7 @@ Both modes create a series of subdirectories&mdash;one for each Compose file&mda
 $ python -m porclr link
 $ python -m porclr copy
 
-# If you haven't defined LOCAL_REPO
+# If you haven't defined LOCAL_REPO or want to override it
 $ python -m porclr link ~/path/to/dir
 $ python -m porclr copy ~/path/to/dir
 ```
