@@ -41,6 +41,6 @@ $ python -m porclr copy ~/path/to/dir
 Upon running either `porclr link` or `porclr copy`, you'll be prompted to authenticate with your Portainer credentials.
 
 ### Location & directory structure
-Both modes create a series of subdirectories&mdash;one for each Compose file&mdash;in a directory that you specify. If you've defined a `LOCAL_REPO` environment variable in your .env file, the path defined there will be used by default. The default `LOCAL_REPO` path can be overridden by passing in a path as an argument to either `porclr link` or `porclr copy`.
+Both modes create a series of subdirectories&mdash;one for each Compose file&mdash;in a directory that you specify. If you've defined a `LOCAL_REPO` environment variable, the path defined there will be used by default. You can override the `LOCAL_REPO` path by passing in a path as an argument to either `porclr link` or `porclr copy`.
 
 If you haven't defined a `LOCAL_REPO` environment variable, you must pass in a path as an argument.
