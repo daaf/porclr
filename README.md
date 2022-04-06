@@ -27,13 +27,6 @@ Create a file called `.env` in the root of your local `porclr` repo. Add the fol
 * `link` creates hard links to the Compose files in a local Portainer volume.
 * `copy` copies the Compose files from Portainer via the Portainer API.
 
-### Authentication
-Upon running either `porclr link` or `porclr copy`, you'll be prompted to authenticate with your Portainer credentials in order to fetch information about your stacks.
-
-### Location & directory structure
-Both modes create a series of subdirectories&mdash;one for each Compose file&mdash;in a directory that you specify. If you've defined a `LOCAL_REPO` environment variable in your .env file, the path defined in `LOCAL_REPO` will be used by default, but can be overridden by passing in a path as an argument to either `porclr link` or `porclr copy`. If you haven't defined a `LOCAL_REPO` environment variable, you must pass in a path.
-
-### Running the commands
 ```shell
 # If you've defined `LOCAL_REPO` in your .env file
 $ python -m porclr link
@@ -43,3 +36,11 @@ $ python -m porclr copy
 $ python -m porclr link ~/path/to/dir
 $ python -m porclr copy ~/path/to/dir
 ```
+
+### Authentication
+Upon running either `porclr link` or `porclr copy`, you'll be prompted to authenticate with your Portainer credentials in order to fetch information about your stacks.
+
+### Location & directory structure
+Both modes create a series of subdirectories&mdash;one for each Compose file&mdash;in a directory that you specify. If you've defined a `LOCAL_REPO` environment variable in your .env file, the path defined there will be used by default. The default `LOCAL_REPO` path can be overridden by passing in a path as an argument to either `porclr link` or `porclr copy`.
+
+If you haven't defined a `LOCAL_REPO` environment variable, you must pass in a path as an argument.
