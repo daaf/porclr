@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-Create links to Portainer's Docker Compose files in a specified directory.
+Link or copy Docker Compose files from Portainer to a directory of your choosing.
 
 Usage:
-    porclr link
+    porclr link [<path>] [--username <username>] [--password <password>]
+    porclr copy [<path>] [--username <username>] [--password <password>]
 
 Options:
     -h --help   Show this help documentation.
@@ -21,6 +22,11 @@ app = typer.Typer()
 
 
 def _version_callback(value: bool) -> None:
+    """Prints the name of the app and the app version.
+
+    :param value: Identifies if the callback function should be executed.
+    :raises typer.Exit: If the app name and version are printed, exits.
+    """
     if value:
         typer.echo(f"{__app_name__} v{__version__}")
         raise typer.Exit()
@@ -37,6 +43,7 @@ def main(
         is_eager=True,
     )
 ) -> None:
+    """Calls `_version_callback` to print the app name and version."""
     return
 
 
@@ -62,6 +69,18 @@ def link(
         hide_input=True,
     ),
 ) -> None:
+    """Creates a `Link` object from the command line arguments, then calls the
+    `Link` object's `execute` method to create the links.
+
+    :param path: Optional. The path on the local filesystem where the links
+        and their associated subdirectories should be created.
+    :param username: Optional. The username to use to authenticate with Portainer.
+        If not provided as a command line argument, the CLI will prompt for
+        the username.
+    :param password: Optional. The password to use to authenticate with Portainer.
+        If not provided as a command line argument, the CLI will prompt for
+        the password.
+    """
     try:
         link_action = actions.Link(path=path, username=username, password=password)
         link_action.execute()
@@ -91,6 +110,18 @@ def copy(
         hide_input=True,
     ),
 ) -> None:
+    """Creates a `Copy` object from the command line arguments, then calls the
+    `Copy` object's `execute` method to create the links.
+
+    :param path: Optional. The path on the local filesystem where the copies
+        and their associated subdirectories should be created.
+    :param username: Optional. The username to use to authenticate with Portainer.
+        If not provided as a command line argument, the CLI will prompt for
+        the username.
+    :param password: Optional. The password to use to authenticate with Portainer.
+        If not provided as a command line argument, the CLI will prompt for
+        the password.
+    """
     try:
         copy_action = actions.Copy(path=path, username=username, password=password)
         copy_action.execute()
