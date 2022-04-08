@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 # Third party imports
-from xmlrpc.client import Boolean
 from decouple import config
 from typer import echo
 

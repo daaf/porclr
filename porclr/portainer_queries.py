@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 # Third party imports
-from urllib.error import HTTPError
 import requests
 
 # Standard library imports
