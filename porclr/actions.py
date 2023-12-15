@@ -6,6 +6,7 @@ from typer import echo
 
 # Standard library imports
 import os
+from typing import Callable
 
 # Local imports
 from porclr import portainer_queries
@@ -69,7 +70,7 @@ class ComposeFileAction(Action):
         utils.create_dir_if_not_extant(path_to_stack_dir)
         return path_to_stack_dir
 
-    def _execute(self, child_class: "ComposeFileAction", func: function):
+    def _execute(self, child_class: "ComposeFileAction", func: Callable) -> None:
         """
         Iterates through all Portainer stacks, creates the required
         directories on the local filesystem, and executes the function
